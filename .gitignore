@@ -34,3 +34,6 @@ HELP.md
 
 # build directory
 build/
+
+# env
+docker/.env

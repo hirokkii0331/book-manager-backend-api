@@ -3,6 +3,8 @@ plugins {
 	id 'org.jetbrains.kotlin.plugin.spring' version '1.9.25'
 	id 'org.springframework.boot' version '3.4.0'
 	id 'io.spring.dependency-management' version '1.1.6'
+	id 'org.jooq.jooq-codegen-gradle' version '3.19.16'
+	id 'org.flywaydb.flyway' version '9.22.0'
 }
 
 group = 'com.example'
@@ -22,18 +24,57 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-jooq'
 	implementation 'org.flywaydb:flyway-core'
 	implementation 'org.flywaydb:flyway-database-postgresql'
+	implementation 'org.jooq:jooq:3.19.11'
+	implementation 'org.jooq:jooq-meta:3.19.11'
+	implementation 'org.jooq:jooq-codegen:3.19.11'
+	implementation 'org.jooq:jooq-postgres-extensions:3.19.11'
+	runtimeOnly 'org.postgresql:postgresql:42.7.4'
+	jooqCodegen 'org.postgresql:postgresql:42.7.4'
 	implementation 'org.jetbrains.kotlin:kotlin-reflect'
 	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
-	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+flyway {
+	url = "jdbc:postgresql://localhost:5432/book_manager"
+	user = "postgres"
+	password = "postgres"
+	locations = ["filesystem:src/main/resources/db/migration"]
 }
 
 kotlin {
 	compilerOptions {
 		freeCompilerArgs.addAll '-Xjsr305=strict'
 	}
+}
+
+jooq {
+	version = '3.19.11'
+	configuration {
+		jdbc {
+			driver = 'org.postgresql.Driver'
+			url = 'jdbc:postgresql://localhost:5432/book_manager'
+			user = 'postgres'
+			password = 'postgres'
+		}
+		generator {
+			database {
+				name = 'org.jooq.meta.postgres.PostgresDatabase'
+				inputSchema = 'public'
+				includes = '.*'
+			}
+			target {
+				packageName = 'org.example.book-manager'
+			}
+		}
+	}
+}
+
+tasks.named('jooqCodegen') {
+	dependsOn tasks.named('flywayMigrate')
+	inputs.files(fileTree("src/main/resources/db/migration"))
 }
 
 tasks.named('test') {
