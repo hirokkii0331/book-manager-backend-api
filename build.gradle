@@ -36,6 +36,10 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.boot:spring-boot-test-autoconfigure'
+	testImplementation 'org.mockito:mockito-core'
+	testImplementation 'org.mockito.kotlin:mockito-kotlin:5.0.0'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
