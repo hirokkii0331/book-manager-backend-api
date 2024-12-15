@@ -42,14 +42,16 @@ class BookControllerTest {
         mockMvc.perform(
             MockMvcRequestBuilders.post("/books/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("""
+                .content(
+                    """
                     {
                         "title": "テスト",
                         "price": 100.0,
                         "authors": [{"id": 1, "name": "テスト太郎", "birthDate": "1980-01-01"}],
                         "status": "UNPUBLISHED"
                     }
-                """.trimIndent())
+                """.trimIndent()
+                )
         )
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.title").value("テスト"))
@@ -72,14 +74,16 @@ class BookControllerTest {
         mockMvc.perform(
             MockMvcRequestBuilders.put("/books/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("""
+                .content(
+                    """
                     {
                         "title": "テスト",
                         "price": 150.0,
                         "authors": [{"id": 1, "name": "テスト次郎", "birthDate": "1980-01-01"}],
                         "status": "PUBLISHED"
                     }
-                """.trimIndent())
+                """.trimIndent()
+                )
         )
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.title").value("テスト"))
