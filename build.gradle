@@ -70,9 +70,16 @@ jooq {
 				name = 'org.jooq.meta.postgres.PostgresDatabase'
 				inputSchema = 'public'
 				includes = '.*'
+				forcedTypes {
+					forcedType {
+						name = "ENUM"
+						includeExpression = ".*\\.status" // 必要に応じて変更
+						includeTypes = ".*"
+					}
+				}
 			}
 			target {
-				packageName = 'org.example.book-manager'
+				packageName = 'org.example.jooq'
 			}
 		}
 	}

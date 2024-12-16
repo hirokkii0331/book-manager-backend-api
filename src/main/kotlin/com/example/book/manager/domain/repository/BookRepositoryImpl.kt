@@ -12,6 +12,7 @@ import java.math.BigDecimal
 import java.time.LocalDate
 
 @Repository
+@Transactional
 class BookRepositoryImpl(private val dsl: DSLContext) : BookRepository {
 
     override fun findByAuthor(authorId: Long): List<Book> {
@@ -48,7 +49,6 @@ class BookRepositoryImpl(private val dsl: DSLContext) : BookRepository {
             }
     }
 
-    @Transactional
     override fun register(book: Book): Book {
         val bookId = dsl.insertInto(table("books"))
             .set(field("title"), book.title)
@@ -76,7 +76,6 @@ class BookRepositoryImpl(private val dsl: DSLContext) : BookRepository {
         return book.copy(id = bookId)
     }
 
-    @Transactional
     override fun update(book: Book): Book {
         val currentStatus = dsl.select(field("status"))
             .from(table("books"))
